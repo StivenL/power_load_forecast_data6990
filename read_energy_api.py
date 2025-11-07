@@ -74,6 +74,7 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     # change to datetime
     df_final['period'] = pd.to_datetime(df_final['period'], format='%Y-%m-%dT%H')
+    df_final['value'] = df_final['value'].astype(int)
 
     return df_final
 
