@@ -32,8 +32,6 @@ def split_timeframe(first_date: str, last_date: str) -> list:
     if date_list[-1] != last_date:
         date_list.append(last_date)
 
-    print(date_list)
-
     return date_list
 
 
@@ -70,12 +68,14 @@ def paginate_results(start_date: str, end_date: str, api_file: str):
     return df
 
 
-def clean_dataframe(df: pd.DataFrame):
+def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     # only keep necessary columns
-    df = df[['period', 'value']]
+    df_final = df[['period', 'value']].copy()
 
     # change to datetime
-    df['period'] = pd.to_datetime(df['period'], format='%Y-%m-%dT%H')
+    df_final['period'] = pd.to_datetime(df_final['period'], format='%Y-%m-%dT%H')
+
+    return df_final
 
 
 def main():
@@ -84,10 +84,10 @@ def main():
     api_path = 'secret_api.txt'
 
     df = paginate_results(start, end, api_path)
-    # clean_dataframe(df)
+    df_final = clean_dataframe(df)
 
     # save as parquet - don't have to fix dates again
-    df.to_parquet('tva_load.parquet')
+    df_final.to_parquet('tva_load.parquet')
 
 
 
