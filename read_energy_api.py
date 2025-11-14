@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import requests
+import os
 
 # also need pyarrow
 
@@ -88,7 +89,9 @@ def main():
     df_final = clean_dataframe(df)
 
     # save as parquet - don't have to fix dates again
-    df_final.to_parquet('tva_load.parquet')
+    if not os.path.isdir('data'):
+        os.mkdir('data')
+    df_final.to_parquet('data/tva_load.parquet')
 
 
 

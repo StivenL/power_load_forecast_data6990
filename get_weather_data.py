@@ -3,6 +3,10 @@ import openmeteo_requests, requests_cache, os
 import pandas as pd
 from retry_requests import retry
 
+# make data folder if it doesn't already exist
+if not os.path.isdir('data'):
+    os.mkdir('data')
+
 # Setup the Open-Meteo API client with cache and retry on error
 cache_session = requests_cache.CachedSession('.cache', expire_after = -1)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
@@ -68,6 +72,6 @@ for response in responses:
 	hourly_data["sunshine_duration"] = hourly_sunshine_duration
 	
 	hourly_dataframe = pd.DataFrame(data = hourly_data)
-	hourly_dataframe.to_parquet(f"{cities[city]}-hourly-data.parquet", index = False)
+	hourly_dataframe.to_parquet(f"data/{cities[city]}-hourly-data.parquet", index = False)
 	print(f"Saved {cities[city]}-hourly-data.parquet to {os.getcwd()}")
 	city += 1
